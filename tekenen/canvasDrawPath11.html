@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+	<head>
+		<title></title>
+		<link rel='stylesheet' 
+		href='basic2.css'
+		type='text/css'>
+	</head>
+	<body>
+		<canvas id="trails" width="400" height="500">
+		</canvas>
+		<script>
+			function createCanopyPath(context) {
+				// Teken een dennenboom
+				context.beginPath();
+				context.moveTo(-25, -50);
+				context.lineTo(-10, -80);
+				context.lineTo(-20, -80);
+				context.lineTo(-5, -110);
+				context.lineTo(-15, -110);
+				// Top van de boom
+				context.lineTo(0, -140);
+				context.lineTo(15, -110);
+				context.lineTo(5, -110);
+				context.lineTo(20, -80);
+				context.lineTo(10, -80);
+				context.lineTo(25, -50);
+				// Sluit het pad met het beginpunt
+				context.closePath();
+			}
+			
+			// Het tekenen van de boom in zijn geheel in één functie
+			function drawTree(context) {
+				// Bewaar de huidige canvas status voor later
+				context.save();
+				// Creeer een schaduw van de boom
+				// door transformatie
+				context.transform(1, 0,-0.5, 1, 0, 0);
+				// Maak de schaduw kleiner (60% in hoogte) 
+				// in de richting van de y dimensie
+				context.scale(1, 0.6);
+				// Boom vulling is zwart met 20% alpha
+				context.fillStyle = 'rgba(0, 0, 0, 0.2)';
+				context.fillRect(-5, -50, 10, 50);
+				// Teken de boom met de schaduw effecten toegepast
+				createCanopyPath(context);
+				context.fill();
+				// Restore the canvas state
+				context.restore();
+				// creeer de gradients op de stam
+				var stamGradient = context.createLinearGradient(-5, -50, 5, -50);
+				stamGradient.addColorStop(0, '#663300');
+				stamGradient.addColorStop(0.4, '#996600');
+				stamGradient.addColorStop(1, '#552200');
+				context.fillStyle = stamGradient;
+				context.fillRect(-5, -50, 10, 50);
+				var canopyShadow = context.createLinearGradient(0, -50, 0, 0);
+				canopyShadow.addColorStop(0, 'rgba(0, 0, 0, 0.5)');
+				canopyShadow.addColorStop(0.2, 'rgba(0, 0, 0, 0.0)');
+				context.fillStyle = canopyShadow;
+				context.fillRect(-5, -50, 10, 50);
+				createCanopyPath(context);
+				context.lineWidth = 4;
+				context.lineJoin = 'round';
+				context.strokeStyle = '#663300';
+				context.stroke();
+				context.fillStyle = '#339900';
+				context.fill();				
+			}
+
+			function drawTrails() {
+				var canvas = document.getElementById('trails');
+				var context = canvas.getContext('2d');
+				context.save();
+
+				// Teken de eerste boom op X=130, Y=250
+				context.save();
+				context.translate(130, 250);
+				drawTree(context);
+				context.restore();
+				// Teken de tweede boom op X=170, Y=200
+				context.save();
+				context.translate(170, 200);
+				// Maak de boom kleiner in beide richtingen (scale)
+				context.scale(0.8, 0.8);
+				drawTree(context);
+				context.restore();
+				// Teken de derde boom op X=260, Y=500
+				context.save();
+				context.translate(260, 500);
+				// Maak de boom 2x groter in beide richtingen (scale)
+				context.scale(2, 2);
+				drawTree(context);
+				context.restore();				
+				
+				// Teken het huidige pad
+				context.stroke();
+				
+				// Teken een curve
+				// Bewaar canvas en teken het pad
+				context.save();
+				context.translate(-10, 350);
+				context.beginPath();
+				// De eerste curve buigt omhoog en naar rechts
+				context.moveTo(0, 0);
+				context.quadraticCurveTo(170, -50, 260, -190);
+				// De tweede curve gaat naar beneden en rechts
+				context.quadraticCurveTo(310, -250, 410,-250);
+				// Teken het pad in een bruine stroke
+				// context.strokeStyle = '#663300';
+				
+				// Vervang de bruine 'stroke' met een achtergrond patroon
+				context.strokeStyle = context.createPattern(grind, 'repeat');
+				context.lineWidth = 20;
+			
+				context.stroke();
+				// Herstel de vorige canvas status
+				context.restore();
+				
+
+				// teken een tekst op het canvas
+				context.save();
+				
+				// Stal de schaduw in op zwart met 20% alpha
+				context.shadowColor = 'rgba(0, 0, 0, 0.2)';
+				// Verplaats de schaduw naar rechts 15 pixels, naar boven 10
+				context.shadowOffsetX = 15;
+				context.shadowOffsetY = -10;
+				// Blur
+				context.shadowBlur = 2;
+
+				// Het font is 60 pixel, Impact
+				context.font = "60px impact";
+				// Bruine vulling
+				context.fillStyle = '#996600';
+				// Centreer de tekst
+				context.textAlign = 'center';
+				// Teken de tekst in het midden van het canvas
+				context.fillText('Fijne wandeling!', 200, 60, 400);
+				context.restore();
+			}
+
+			var grind = new Image();
+			grind.src = "grind.jpg";
+			grind.onload = function () {
+			drawTrails();
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+	<head>
+		<title></title>
+		<link rel='stylesheet' 
+		href='basic2.css'
+		type='text/css'>
+	</head>
+	<body>
+		<canvas id="trails" width="400" height="300">
+		</canvas>
+		<script>
+			function createCanopyPath(context) {
+				// Teken een dennenboom
+				context.beginPath();
+				context.moveTo(-25, -50);
+				context.lineTo(-10, -80);
+				context.lineTo(-20, -80);
+				context.lineTo(-5, -110);
+				context.lineTo(-15, -110);
+				// Top van de boom
+				context.lineTo(0, -140);
+				context.lineTo(15, -110);
+				context.lineTo(5, -110);
+				context.lineTo(20, -80);
+				context.lineTo(10, -80);
+				context.lineTo(25, -50);
+				// Sluit het pad met het beginpunt
+				context.closePath();
+			}
+			function drawTrails() {
+				var canvas = document.getElementById('trails');
+				var context = canvas.getContext('2d');
+				context.save();
+				context.translate(130, 250);
+				// Maak de vorm van een dennenboom pad
+				createCanopyPath(context);
+				// Verander de eigenschappen
+				// Verhoog de breedte van de lijn
+				context.lineWidth = 4;
+				// Maak de hoeken rond (van het pad)
+				context.lineJoin = 'round';
+				// Verander de kleur in bruin
+				context.strokeStyle = '#663300';
+				// Vulkleur groen en opvullen
+				context.fillStyle = '#339900';
+				context.fill();
+				// Verander vulkleur in bruin
+				context.fillStyle = '#663300';
+				
+				// vul een rechthoek (voor de boom
+				context.fillRect(-5, -50, 10, 50)				
+
+				
+				// Maak een horizontale 3 stop kleurenovergang (gradient) op de stam
+				var stamGradient = context.createLinearGradient(-5, -50, 5, -50);
+				// Het begin van de stam is medium bruin
+				stamGradient.addColorStop(0, '#663300');
+				// Het gedeelte midden links is lichter van kleur
+				stamGradient.addColorStop(0.4, '#996600');
+				// De rechterzijde is het donkerder
+				stamGradient.addColorStop(1, '#552200');
+				// Pas de gradient als vulstijl toe en teken de stam
+				context.fillStyle = stamGradient;
+				context.fillRect(-5, -50, 10, 50);
+				// Een tweede verticale gradient maakt een schaduw van de boom (canopy) op de stam
+				var canopyShadow = context.createLinearGradient(0, -50, 0, 0);
+				// Het begin van de schaduw gradient is zwart met 50% alpha
+				canopyShadow.addColorStop(0, 'rgba(0, 0, 0, 0.5)');
+				// Naar beneden wordt de schaduw langzaam transparant
+				// De rest van de stam krijgt geen schaduw.
+				canopyShadow.addColorStop(0.2, 'rgba(0, 0, 0, 0.0)');
+				// Teken de schaduw gradient aan de bovenzijde van de stam gradient
+				context.fillStyle = canopyShadow;
+				context.fillRect(-5, -50, 10, 50);
+				
+				// Teken het huidige pad
+				context.stroke();
+				context.restore();
+				
+				// Teken een curve
+				// Bewaar canvas en teken het pad
+				context.save();
+				context.translate(-10, 350);
+				context.beginPath();
+				// De eerste curve buigt omhoog en naar rechts
+				context.moveTo(0, 0);
+				context.quadraticCurveTo(170, -50, 260, -190);
+				// De tweede curve gaat naar beneden en rechts
+				context.quadraticCurveTo(310, -250, 410,-250);
+				// Teken het pad in een bruine stroke
+				// context.strokeStyle = '#663300';
+				
+				// Vervang de bruine 'stroke' met een achtergrond patroon
+				context.strokeStyle = context.createPattern(grind, 'repeat');
+				context.lineWidth = 20;
+			
+				context.stroke();
+				// Herstel de vorige canvas status
+				context.restore();
+			}
+			
+			var grind = new Image();
+			grind.src = "grind.jpg";
+			grind.onload = function () {
+			drawTrails();
+			}
+
+		</script>
+	</body>
+</html>

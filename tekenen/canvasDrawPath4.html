@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+	<head>
+		<title></title>
+		<link rel='stylesheet' 
+		href='basic2.css'
+		type='text/css'>
+	</head>
+	<body>
+		<canvas id="trails" width="400" height="300">
+		</canvas>
+		<script>
+			function createCanopyPath(context) {
+				// Teken een dennenboom
+				context.beginPath();
+				context.moveTo(-25, -50);
+				context.lineTo(-10, -80);
+				context.lineTo(-20, -80);
+				context.lineTo(-5, -110);
+				context.lineTo(-15, -110);
+				// Top van de boom
+				context.lineTo(0, -140);
+				context.lineTo(15, -110);
+				context.lineTo(5, -110);
+				context.lineTo(20, -80);
+				context.lineTo(10, -80);
+				context.lineTo(25, -50);
+				// Sluit het pad met het beginpunt
+				context.closePath();
+			}
+			function drawTrails() {
+				var canvas = document.getElementById('trails');
+				var context = canvas.getContext('2d');
+				context.save();
+				context.translate(130, 250);
+				// Maak de vorm van een dennenboom pad
+				createCanopyPath(context);
+// Verander de eigenschappen
+				// Verhoog de breedte van de lijn
+				context.lineWidth = 4;
+				// Maak de hoeken rond (van het pad)
+				context.lineJoin = 'round';
+				// Verander de kleur in bruin
+				context.strokeStyle = '#663300';
+				// Vulkleur groen en opvullen
+				context.fillStyle = '#339900';
+				context.fill();
+
+// Verander vulkleur in bruin
+context.fillStyle = '#663300';
+// vul een rechthoek (voor de boom
+context.fillRect(-5, -50, 10, 50)
+				
+// Verander de eigenschappen
+				// Teken het huidige pad
+				context.stroke();
+				context.restore();
+			}
+			window.addEventListener("load", drawTrails, true);
+		</script>
+	</body>
+</html>
